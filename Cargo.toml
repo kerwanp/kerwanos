@@ -1,0 +1,63 @@
+[package]
+name = "kerwanos"
+version = "0.1.0"
+edition = "2021"
+
+[workspace]
+members = ["crates/*"]
+
+[package.metadata.bootimage]
+run-args = [
+  "-device",
+  "isa-debug-exit,iobase=0xf4,iosize=0x04",
+  "-serial",
+  "stdio",
+]
+test-args = [
+  "-device",
+  "isa-debug-exit,iobase=0xf4,iosize=0x04",
+  "-serial",
+  "stdio",
+]
+test-success-exit-code = 33 # (0x10 << 1) | 1
+
+[workspace.dependencies]
+qemu = { path = "crates/qemu" }
+x86 = { path = "crates/x86" }
+vga = { path = "crates/vga" }
+serial = { path = "crates/serial" }
+pic = { path = "crates/pic" }
+kernel = { path = "crates/kernel" }
+bitflags = "2.4.2"
+lazy_static = { version = "1.4.0", features = ["spin_no_std"] }
+spin = "0.9.8" # TODO: Rewrite
+bit_field = "0.10.2"
+pc-keyboard = "0.7.0"
+anyhow = { version = "1.0.81", default-features = false }
+snafu = { verseion = "0.8.2", default-features = false, features = [
+  "rust_1_65",
+  "rust_1_61",
+] }
+bootloader = { version = "0.9", features = ["map_physical_memory"] }
+linked_list_allocator = "0.9.0"
+crossbeam-queue = { version = "0.3.11", default-features = false, features = [
+  "alloc",
+] }
+conquer-once = { version = "0.4.0", default-features = false }
+futures-util = { version = "0.3.30", default-features = false, features = [
+  "alloc",
+] }
+
+[dependencies]
+bootloader.workspace = true
+bit_field.workspace = true
+lazy_static.workspace = true
+bitflags.workspace = true
+qemu.workspace = true
+x86.workspace = true
+vga.workspace = true
+spin.workspace = true
+serial.workspace = true
+kernel.workspace = true
+volatile = "0.5.1"
+linked_list_allocator.workspace = true

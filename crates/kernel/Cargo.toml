@@ -1,0 +1,21 @@
+[package]
+name = "kernel"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+x86.workspace = true
+vga.workspace = true
+qemu.workspace = true
+serial.workspace = true
+lazy_static.workspace = true
+spin.workspace = true
+pic.workspace = true
+pc-keyboard.workspace = true
+bootloader.workspace = true
+linked_list_allocator.workspace = true
+crossbeam-queue.workspace = true
+conquer-once.workspace = true
+futures-util.workspace = true
