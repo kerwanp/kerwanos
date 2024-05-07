@@ -103,6 +103,7 @@ dependencies = [
  "lazy_static",
  "linked_list_allocator",
  "pc-keyboard",
+ "pci",
  "pic",
  "qemu",
  "serial",
@@ -121,10 +122,15 @@ dependencies = [
  "kernel",
  "lazy_static",
  "linked_list_allocator",
+ "pci",
  "qemu",
  "serial",
+ "shell",
  "spin 0.9.8",
+ "std",
+ "terminal",
  "vga",
+ "virtio",
  "volatile",
  "x86",
 ]
@@ -162,6 +168,16 @@ name = "pc-keyboard"
 version = "0.7.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ed089a1fbffe3337a1a345501c981f1eb1e47e69de5a40e852433e12953c3174"
+
+[[package]]
+name = "pci"
+version = "0.1.0"
+dependencies = [
+ "bit_field",
+ "bitflags",
+ "serial",
+ "x86",
+]
 
 [[package]]
 name = "pic"
@@ -224,6 +240,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "shell"
+version = "0.1.0"
+dependencies = [
+ "futures-util",
+ "kernel",
+ "lazy_static",
+ "spin 0.9.8",
+ "std",
+]
+
+[[package]]
 name = "snafu"
 version = "0.8.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -269,6 +296,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "std"
+version = "0.1.0"
+dependencies = [
+ "kernel",
+ "vga",
+ "x86",
+]
+
+[[package]]
 name = "syn"
 version = "2.0.52"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -277,6 +313,16 @@ dependencies = [
  "proc-macro2",
  "quote",
  "unicode-ident",
+]
+
+[[package]]
+name = "terminal"
+version = "0.1.0"
+dependencies = [
+ "futures-util",
+ "kernel",
+ "pc-keyboard",
+ "vga",
 ]
 
 [[package]]
@@ -293,6 +339,10 @@ dependencies = [
  "spin 0.9.8",
  "x86",
 ]
+
+[[package]]
+name = "virtio"
+version = "0.1.0"
 
 [[package]]
 name = "volatile"

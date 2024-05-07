@@ -6,12 +6,18 @@ pub mod allocator;
 pub mod interrupts;
 pub mod memory;
 pub mod task;
+pub mod tty;
 
 extern crate alloc;
 
+use core::fmt::Write;
+
+use alloc::{format, string::ToString};
 use interrupts::PICS;
 use lazy_static::lazy_static;
-use vga::{print, println};
+use qemu::QemuExitCode;
+use tty::TTY;
+use vga::println;
 use x86::{
     dt::gdt::{Descriptor, GlobalDescriptorTable},
     dt::idt::InterruptDescriptorTable,
@@ -90,4 +96,23 @@ extern "x86-interrupt" fn timer_interrupt_handler() {
         PICS.lock()
             .notify_end_of_interrupt(InterruptIndex::Timer.as_u8())
     };
+}
+
+#[derive(Debug)]
+pub enum ExitCode {
+    Success,
+    Failed,
+}
+
+impl From<ExitCode> for QemuExitCode {
+    fn from(value: ExitCode) -> Self {
+        match value {
+            ExitCode::Success => QemuExitCode::Success,
+            ExitCode::Failed => QemuExitCode::Failed,
+        }
+    }
+}
+
+pub fn exit(exit_code: ExitCode) -> ! {
+    qemu::exit(exit_code.into())
 }

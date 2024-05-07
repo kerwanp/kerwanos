@@ -12,6 +12,8 @@ run-args = [
   "isa-debug-exit,iobase=0xf4,iosize=0x04",
   "-serial",
   "stdio",
+  "-virtfs",
+  "local,path=data/mnt,mount_tag=host0,security_model=passthrough,id=host0",
 ]
 test-args = [
   "-device",
@@ -28,13 +30,18 @@ vga = { path = "crates/vga" }
 serial = { path = "crates/serial" }
 pic = { path = "crates/pic" }
 kernel = { path = "crates/kernel" }
+terminal = { path = "crates/terminal" }
+std = { path = "crates/std" }
+shell = { path = "crates/shell" }
+pci = { path = "crates/pci" }
+virtio = { path = "crates/virtio" }
 bitflags = "2.4.2"
 lazy_static = { version = "1.4.0", features = ["spin_no_std"] }
 spin = "0.9.8" # TODO: Rewrite
 bit_field = "0.10.2"
 pc-keyboard = "0.7.0"
 anyhow = { version = "1.0.81", default-features = false }
-snafu = { verseion = "0.8.2", default-features = false, features = [
+snafu = { version = "0.8.2", default-features = false, features = [
   "rust_1_65",
   "rust_1_61",
 ] }
@@ -59,5 +66,10 @@ vga.workspace = true
 spin.workspace = true
 serial.workspace = true
 kernel.workspace = true
+pci.workspace = true
 volatile = "0.5.1"
 linked_list_allocator.workspace = true
+terminal.workspace = true
+std.workspace = true
+shell.workspace = true
+virtio.workspace = true

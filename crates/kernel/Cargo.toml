@@ -10,6 +10,7 @@ x86.workspace = true
 vga.workspace = true
 qemu.workspace = true
 serial.workspace = true
+pci.workspace = true
 lazy_static.workspace = true
 spin.workspace = true
 pic.workspace = true

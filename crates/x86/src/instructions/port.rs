@@ -72,3 +72,13 @@ impl PortRead for u16 {
         value
     }
 }
+
+impl PortRead for u32 {
+    unsafe fn read_from_port(port: u16) -> u32 {
+        let value: u32;
+        unsafe {
+            asm!("in eax, dx", out("eax") value, in("dx") port, options(nomem, nostack, preserves_flags));
+        }
+        value
+    }
+}

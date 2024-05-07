@@ -7,10 +7,11 @@ use spin::Mutex;
 use x86::instructions::interrupts;
 
 const ADDRESS: usize = 0xb8000;
-const BUFFER_HEIGHT: usize = 25;
-const BUFFER_WIDTH: usize = 80;
+pub const BUFFER_HEIGHT: usize = 25;
+pub const BUFFER_WIDTH: usize = 80;
 
 lazy_static! {
+    static ref BUFFER: Mutex<&'static mut Buffer> = Mutex::new(Buffer::new(ADDRESS));
     pub static ref WRITER: Mutex<Writer> = {
         let buffer = Buffer::new(ADDRESS);
         let writer = Writer::new(buffer);
@@ -50,13 +51,19 @@ pub enum Color {
     White = 15,
 }
 
-#[derive(Clone, Copy)]
+#[derive(Debug, Clone, Copy)]
 #[repr(transparent)]
 pub struct CharStyle(u8);
 
 impl CharStyle {
     pub fn new(background: Color, foreground: Color) -> Self {
         CharStyle(((background as u8) << 4) | (foreground as u8))
+    }
+}
+
+impl Default for CharStyle {
+    fn default() -> Self {
+        Self::new(Color::Black, Color::White)
     }
 }
 
@@ -95,8 +102,12 @@ impl Buffer {
 }
 
 impl Buffer {
-    pub fn write(&mut self, char: Char, x: usize, y: usize) {
-        self.0[y][x] = char
+    pub fn write(&mut self, char: Char, row: usize, col: usize) {
+        self.0[row][col] = char
+    }
+
+    pub fn read(&self, row: usize, col: usize) -> Char {
+        self.0[row][col]
     }
 }
 
@@ -177,5 +188,13 @@ impl fmt::Write for Writer {
 pub fn _print(args: fmt::Arguments) {
     interrupts::without_interrupts(|| {
         WRITER.lock().write_fmt(args).unwrap();
-    });
+    })
+}
+
+pub fn write(char: Char, row: usize, col: usize) {
+    BUFFER.lock().write(char, row, col)
+}
+
+pub fn read(row: usize, col: usize) -> Char {
+    BUFFER.lock().read(row, col)
 }

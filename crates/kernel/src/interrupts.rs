@@ -32,12 +32,6 @@ pub fn init() {
 }
 
 pub extern "x86-interrupt" fn keyboard_interrupt_handler() {
-    lazy_static! {
-        static ref KEYBOARD: Mutex<Keyboard<layouts::Azerty, ScancodeSet1>> = Mutex::new(
-            Keyboard::new(ScancodeSet1::new(), layouts::Azerty, HandleControl::Ignore)
-        );
-    }
-
     let mut port = Port::new(0x60);
     let scancode: u8 = unsafe { port.read() };
     crate::task::keyboard::add_scancode(scancode);
